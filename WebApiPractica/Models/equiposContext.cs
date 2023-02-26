@@ -8,5 +8,6 @@ namespace WebApiPractica.Models
         {
             
         }
+        public DbSet<equipos> equipos { get; set; }
     }
 }
