@@ -81,7 +81,7 @@ namespace WebApiPractica.Properties
             //Para actualizar un registro, se obtiene el registro original de la base de datos
             //Al cual alteraremos alguna prpiedad
             equipos? equipoActual = (from e in _equiposContexto.equipos
-                                     where e.id_equipos = id
+                                     where e.id_equipos == id
                                      select e).FirstOrDefault();
 
             //Verificamos que exista el registro segun su ID
@@ -99,7 +99,10 @@ namespace WebApiPractica.Properties
 
             //Se marca el registro como modificado en el cotexto
             //y se envia la modificación a la base de datos
-            _equiposContexto
+            _equiposContexto.Entry(equipoActual).State = EntityState.Modified;
+            _equiposContexto.SaveChanges();
+
+            return Ok(equipoModificar);
 
         }
     }
