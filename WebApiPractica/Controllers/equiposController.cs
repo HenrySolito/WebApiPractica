@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApiPractica.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace WebApiPractica.Properties
 {
@@ -34,7 +35,7 @@ namespace WebApiPractica.Properties
         [Route("GetById/{id}")]
         public IActionResult Get(int id) 
         {
-            equipos? equipo = (from e in _equiposContexto.equipos where e.id_equipos = id select e).FirstOrDefault();
+            equipos? equipo = (from e in _equiposContexto.equipos where e.id_equipos == id select e).FirstOrDefault();
 
             if (equipo == null)
             {
@@ -103,6 +104,32 @@ namespace WebApiPractica.Properties
             _equiposContexto.SaveChanges();
 
             return Ok(equipoModificar);
+
+
+            
+
+        }
+
+        [HttpDelete]
+        [Route("eliminar/{id}")]
+        public IActionResult EliminarEquipo(int id)
+        {
+            //Para acrualizar un registro, se obtiene el registro original de la baso
+            //al cual eliminaremos
+            equipos? equipo = (from e in _equiposContexto.equipos
+                               where e.id_equipos == id
+                               select e).FirstOrDefault();
+
+            //Verificamos que exista el registro segun su ID
+            if (equipo == null)
+                return NotFound();
+
+            //Ejecutamos la acción de eliminar el registro
+            _equiposContexto.equipos.Attach(equipo);
+            _equiposContexto.equipos.Remove(equipo);
+            _equiposContexto.SaveChanges();
+
+            return Ok(equipo);
 
         }
     }
