@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 namespace WebApiPractica.Models
 {
     public class equipos
